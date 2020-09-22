@@ -33,9 +33,13 @@ class Body extends Component {
     console.log(this.state.calculus);
   }
 
+  sendData = () => {
+    this.props.getData("lol");
+  };
+
   render() {
     return (
-      <div className="calc-body">
+      <div onClick={this.sendData} className="calc-body">
         <Button btn="AC" />
         <Button btn="+/-" />
         <Button btn="%" />

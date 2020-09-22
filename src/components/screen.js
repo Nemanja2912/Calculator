@@ -6,7 +6,7 @@ class Screen extends Component {
     this.state = {};
   }
   render() {
-    return <div className="screen">55</div>;
+    return <div className="screen">{this.props.display}</div>;
   }
 }
 
