@@ -5,132 +5,160 @@ class Body extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      memory: "",
-      primaryCalculus: "1",
       currentNum: "",
-      operation: false,
+      maxChar: 9,
       calculus: "",
-      operationStatus: "primary",
+      operation: false,
+      equal: false,
     };
   }
 
+  //   Click number button
   print = (n) => {
-    this.setState({
-      currentNum: this.state.currentNum + n,
-      calculus: this.state.calculus + n,
-      operation: false,
-    });
+    if (this.state.currentNum.length >= this.state.maxChar) {
+      return null;
+    }
 
-    if (this.state.operationStatus === "secondary") {
+    if (
+      (this.state.currentNum === "" || this.state.currentNum === "0") &&
+      n === 0
+    ) {
+      return null;
+    }
+
+    if (this.state.equal) {
       this.setState({
-        primaryCalculus: "1",
+        currentNum: "" + n,
+        calculus: "" + n,
+        equal: false,
+      });
+    } else {
+      this.setState({
+        currentNum: this.state.currentNum + n,
+        calculus: this.state.calculus + n,
+        operation: false,
       });
     }
 
-    this.sendData(this.state.currentNum + n, this.state.calculus + n);
+    this.sendData();
   };
 
-  operations = (sign) => {
-    //   If operation is set to true cut last sign and put current pressed
-    if (this.state.operation) {
-      this.setState({
-        calculus: this.state.calculus.slice(0, -2) + ` ${sign} `,
-      });
-
-      //   When operation is true and sign * or / then send data to display: current memory number and preview whole calculus
-      if (sign === "*" || sign === "/") {
-        if (this.state.operationStatus === "secondary") {
-          this.sendData(
-            this.state.memory,
-            this.state.calculus.slice(0, -2) + ` ${sign} `
-          );
-        } else {
-          this.sendData(
-            eval(this.state.primaryCalculus),
-            this.state.calculus.slice(0, -2) + ` ${sign} `
-          );
-        }
-      }
-
-      //   When operation is true and sign NOT * or / then send data to display: calculate whole calculus and preview whole calculus
-      else {
-        this.sendData(
-          eval(this.state.calculus.slice(0, -2)),
-          this.state.calculus.slice(0, -2) + ` ${sign} `
-        );
-      }
+  //   Comma
+  comma = () => {
+    if (!Number(this.state.currentNum + ".1")) {
+      return null;
     }
 
-    // If operation is false then set memory to current number, reset current number, add this sign to calculus and active operation
-    else {
+    if (this.state.currentNum.length >= this.state.maxChar - 1) {
+      return null;
+    }
+
+    if (this.state.currentNum === "") {
       this.setState({
-        memory: this.state.currentNum,
+        currentNum: 0 + ".",
+        calculus: 0 + ".",
+      });
+    } else {
+      this.setState({
+        currentNum: this.state.currentNum + ".",
+        calculus: this.state.calculus + ".",
+      });
+    }
+
+    this.sendData();
+  };
+
+  //   operation function
+  operation = (sign) => {
+    if (this.state.operation) {
+      this.setState({
+        calculus: this.state.calculus.slice(0, -3) + ` ${sign} `,
+      });
+    } else {
+      this.setState({
         currentNum: "",
         calculus: this.state.calculus + ` ${sign} `,
         operation: true,
+        equal: false,
       });
 
-      //   If operation is false and sign * OR / send data to display: current number and preview whole calculus
-      if (sign === "*" || sign === "/") {
+      if (this.state.calculus === "") {
         this.setState({
-          primaryCalculus:
-            this.state.primaryCalculus + `${sign}` + this.state.currentNum,
-          operationStatus: "primary",
+          calculus: "0" + ` ${sign} `,
         });
-        this.sendData(
-          eval(this.state.primaryCalculus + `${sign}` + this.state.currentNum),
-          this.state.calculus + ` ${sign} `
-        );
-      }
-
-      //   If operation is false and sign NOT * OR / send data to display: calculate whole calculus and preview whole calculus
-      else {
-        this.setState({
-          operationStatus: "secondary",
-        });
-        this.sendData(
-          eval(this.state.calculus),
-          this.state.calculus + ` ${sign} `
-        );
       }
     }
+
+    this.sendData();
   };
 
+  // Secundary operation
   add = () => {
-    this.operations("+");
+    this.operation("+");
   };
 
   substraction = () => {
-    this.operations("-");
+    this.operation("-");
   };
 
   multiplication = () => {
-    this.operations("*");
+    this.operation("*");
   };
-
   division = () => {
-    this.operations("/");
+    this.operation("/");
   };
 
-  sendData = (val1, val2) => {
-    this.props.getData(val1, val2);
+  //   Equal
+  equal = () => {
+    if (this.state.operation) {
+      this.setState({
+        currentNum: eval(this.state.calculus.slice(0, -2)),
+        calculus: eval(this.state.calculus.slice(0, -2)),
+        operation: false,
+        equal: true,
+      });
+    } else {
+      this.setState({
+        currentNum: eval(this.state.calculus),
+        calculus: eval(this.state.calculus),
+        equal: true,
+      });
+    }
+    this.sendData();
   };
 
+  //   Reset button
   reset = () => {
     this.setState({
       currentNum: "",
-      operation: false,
       calculus: "",
-      primaryCalculus: "1",
+      operation: false,
     });
-    this.sendData("", "");
+
+    this.sendData();
   };
+
+  //   Lift data up
+  sendData = () => {
+    setTimeout(() => {
+      if (this.state.operation) {
+        this.props.getData(
+          eval(this.state.calculus.slice(0, -2)),
+          this.state.calculus
+        );
+      } else {
+        this.props.getData(this.state.currentNum, this.state.calculus);
+      }
+    }, 0);
+  };
+
+  //
 
   render() {
     return (
       <div className="calc-body">
         <Button func={this.reset} btn="AC" />
-        <Button btn="+/-" />
+        <Button func={this.sign} btn="+/-" />
         <Button btn="%" />
         <Button func={this.division} btn="/" />
         <Button func={() => this.print(7)} btn="7" />
@@ -146,8 +174,8 @@ class Body extends Component {
         <Button func={() => this.print(3)} btn="3" />
         <Button func={this.add} btn="+" />
         <Button func={() => this.print(0)} span="2" btn="0" />
-        <Button btn="." />
-        <Button btn="=" />
+        <Button func={this.comma} btn="." />
+        <Button func={this.equal} btn="=" />
       </div>
     );
   }

@@ -8,7 +8,9 @@ class Screen extends Component {
   render() {
     return (
       <div className="screen">
-        <p className="preview">{this.props.preview}</p>
+        <p className="preview">
+          {this.props.preview === "" ? 0 : this.props.preview}
+        </p>
         <p>{this.props.display === "" ? 0 : this.props.display}</p>
       </div>
     );
