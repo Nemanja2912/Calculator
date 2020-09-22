@@ -19,10 +19,20 @@ body {
 
 .screen {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
   font-size: 50px;
   height: 100%;
+}
+
+.screen > p {
+  margin: 0;
+}
+
+.preview {
+  font-size: 16px;
+  margin-bottom: 10px !important;
 }
 
 .calc-body {
