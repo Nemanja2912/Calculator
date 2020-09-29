@@ -8,6 +8,7 @@ body {
   color: #121212;
   font-family: sans-serif;
   font-size: 30px;
+  overflow: hidden;
 }
 
 @media (min-width: 992px) {
@@ -27,6 +28,7 @@ body {
 .screen {
   height: 30%;
   box-shadow: 0px 2px 10px 0px rgba(116, 116, 116, 0.6);
+  z-index: 100;
 }
 
 .calc-body {
@@ -34,6 +36,7 @@ body {
   grid-template-columns: 4fr 1fr 25px;
   justify-content: space-between;
   height: 70%;
+  position: relative;
 }
 
 .number {
@@ -64,4 +67,40 @@ body {
   display: Flex;
   justify-content: center;
   align-items: center;
+  transition: 1s;
+  position: absolute;
+  height: 100%;
+  right: 0%;
+  left: calc(100% - 25px);
+  width: 25px;
+  z-index: 100;
+}
+
+.advance > p {
+  transform-origin: center;
+  height: max-content;
+  transition: 1s;
+}
+
+.advance-open {
+  left: 0%;
+  right: 100%;
+}
+
+.advance-open > p {
+  transform: rotate(180deg);
+}
+
+.advance-body {
+  position: absolute;
+  left: 100%;
+
+  height: 100%;
+  width: calc(100vw - 25px);
+  transition: 1s;
+  background-color: aliceblue;
+}
+
+.advance-body-open {
+  left: 25px;
 }
