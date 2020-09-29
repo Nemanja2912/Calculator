@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/Calculator/static/css/main.60d714a9.chunk.css",
-    "main.js": "/Calculator/static/js/main.a06d688b.chunk.js",
-    "main.js.map": "/Calculator/static/js/main.a06d688b.chunk.js.map",
+    "main.js": "/Calculator/static/js/main.b9048ea6.chunk.js",
+    "main.js.map": "/Calculator/static/js/main.b9048ea6.chunk.js.map",
     "runtime-main.js": "/Calculator/static/js/runtime-main.c1781e1b.js",
     "runtime-main.js.map": "/Calculator/static/js/runtime-main.c1781e1b.js.map",
     "static/js/2.3c9e5114.chunk.js": "/Calculator/static/js/2.3c9e5114.chunk.js",
     "static/js/2.3c9e5114.chunk.js.map": "/Calculator/static/js/2.3c9e5114.chunk.js.map",
     "index.html": "/Calculator/index.html",
-    "precache-manifest.6a437d90960efc255cc3d3fd89ded45a.js": "/Calculator/precache-manifest.6a437d90960efc255cc3d3fd89ded45a.js",
+    "precache-manifest.ac0d6b175b6d20e3335e675ca718053b.js": "/Calculator/precache-manifest.ac0d6b175b6d20e3335e675ca718053b.js",
     "service-worker.js": "/Calculator/service-worker.js",
     "static/css/main.60d714a9.chunk.css.map": "/Calculator/static/css/main.60d714a9.chunk.css.map",
     "static/js/2.3c9e5114.chunk.js.LICENSE.txt": "/Calculator/static/js/2.3c9e5114.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.c1781e1b.js",
     "static/js/2.3c9e5114.chunk.js",
     "static/css/main.60d714a9.chunk.css",
-    "static/js/main.a06d688b.chunk.js"
+    "static/js/main.b9048ea6.chunk.js"
   ]
 }
