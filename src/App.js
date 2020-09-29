@@ -1,9 +1,19 @@
 import React, { Component } from "react";
+import Screen from "./components/Screen";
+import Body from "./components/Body";
 
 class App extends Component {
-  state = {};
+  state = {
+    height: window.innerHeight,
+  };
   render() {
-    return <h1>Hello</h1>;
+    console.log(this.state.height);
+    return (
+      <div style={{ height: this.state.height }} className="app">
+        <Screen />
+        <Body />
+      </div>
+    );
   }
 }
 
