@@ -8,8 +8,8 @@ class Screen extends Component {
         <div className="display">
           {this.props.display ? this.props.display : 0}
         </div>
-        <div className="preview">
-          <p>{this.props.preview.replace("/", "÷").replace("*", "×")}</p>
+        <div onClick={this.props.handleHide} className="preview">
+          <p>{this.props.preview.replaceAll("/", "÷").replaceAll("*", "×")}</p>
         </div>
       </div>
     );

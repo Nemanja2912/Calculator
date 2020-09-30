@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: aliceblue;
+  background-color: #d4d4d2;
   color: #121212;
   font-family: sans-serif;
   font-size: 30px;
@@ -34,7 +34,7 @@ body {
   align-items: flex-end;
   justify-content: flex-end;
   background-color: #121212;
-  color: aliceblue;
+  color: #d4d4d2;
 }
 
 .display {
@@ -61,7 +61,7 @@ body {
 
 .calc-body {
   display: grid;
-  grid-template-columns: 4fr 1fr 25px;
+  grid-template-columns: 4fr 25px;
   justify-content: space-between;
   height: 70%;
   position: relative;
@@ -71,15 +71,18 @@ body {
   display: grid;
 
   height: 100%;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: ". . . ." ". . . ." ". . . ." ". . . ." "span2 span2 . .";
 }
 
 .operation {
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-  color: #f18e66;
-  border-left: 1px solid #12121221;
+  color: #d4d4d2;
+  background-color: #505050;
+}
+
+.span2 {
+  grid-area: span2;
 }
 
 .button {
@@ -87,11 +90,13 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  border: 1px solid #12121221;
 }
 
 .advance {
-  background-color: #f18e66;
+  background-color: #ff9500;
   font-size: 50px;
+  color: #d4d4d2;
   display: Flex;
   justify-content: center;
   align-items: center;
@@ -126,9 +131,35 @@ body {
   height: 100%;
   width: calc(100vw - 25px);
   transition: 1s;
-  background-color: aliceblue;
+  background-color: #d4d4d2;
 }
 
 .advance-body-open {
   left: 25px;
+}
+
+.history {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #121212da;
+  z-index: 1000;
+  flex-direction: column;
+  color: aliceblue;
+}
+
+.history > p {
+  border-bottom: 2px solid #ffffff2a;
+  padding: 10px 15px 10px 5px;
+}
+
+.close {
+  position: absolute;
+  right: -10px;
+  border-bottom: 0px !important;
+  top: -10px;
+  background-color: aliceblue;
+  color: #121212;
 }
