@@ -5,7 +5,7 @@ class Button extends Component {
   render() {
     return (
       <p
-        onClick={() => this.props.handlePrint(this.props.button)}
+        onClick={() => this.props.handleFunc(this.props.button)}
         className="button"
       >
         {this.props.button === "/" ? (

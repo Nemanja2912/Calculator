@@ -20,31 +20,39 @@ class Body extends Component {
   };
 
   render() {
+    const {
+      handlePrint,
+      handleAdd,
+      handleSubstraction,
+      handleDivision,
+      handleMultiplication,
+    } = this.props;
+
     return (
       <div className="calc-body">
         <div className="number">
-          <Button handlePrint={this.props.handlePrint} button="7"></Button>
-          <Button handlePrint={this.props.handlePrint} button="8"></Button>
-          <Button handlePrint={this.props.handlePrint} button="9"></Button>
-          <Button handlePrint={this.props.handlePrint} button="4"></Button>
-          <Button handlePrint={this.props.handlePrint} button="5"></Button>
-          <Button handlePrint={this.props.handlePrint} button="6"></Button>
-          <Button handlePrint={this.props.handlePrint} button="1"></Button>
-          <Button handlePrint={this.props.handlePrint} button="2"></Button>
-          <Button handlePrint={this.props.handlePrint} button="3"></Button>
-          <Button handlePrint={this.props.handlePrint} button="0"></Button>
-          <Button handlePrint={this.props.handlePrint} button="."></Button>
+          <Button handleFunc={handlePrint} button="7"></Button>
+          <Button handleFunc={handlePrint} button="8"></Button>
+          <Button handleFunc={handlePrint} button="9"></Button>
+          <Button handleFunc={handlePrint} button="4"></Button>
+          <Button handleFunc={handlePrint} button="5"></Button>
+          <Button handleFunc={handlePrint} button="6"></Button>
+          <Button handleFunc={handlePrint} button="1"></Button>
+          <Button handleFunc={handlePrint} button="2"></Button>
+          <Button handleFunc={handlePrint} button="3"></Button>
+          <Button handleFunc={handlePrint} button="0"></Button>
+          <Button handleFunc={handlePrint} button="."></Button>
           <Button button="="></Button>
         </div>
         <div className="operation">
           <Button button="AC"></Button>
-          <Button button="/"></Button>
-          <Button button="*"></Button>
-          <Button button="-"></Button>
-          <Button button="+"></Button>
+          <Button handleFunc={handleDivision} button="/"></Button>
+          <Button handleFunc={handleMultiplication} button="*"></Button>
+          <Button handleFunc={handleSubstraction} button="-"></Button>
+          <Button handleFunc={handleAdd} button="+"></Button>
         </div>
-        <div onClick={this.handleAdvance} className={this.state.advanceClass}>
-          <p>&#x2039;</p>
+        <div className={this.state.advanceClass}>
+          <p onClick={this.handleAdvance}>&#x2039;</p>
         </div>
         <div className={this.state.advanceBodyClass}>asaasas</div>
       </div>
