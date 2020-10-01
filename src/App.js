@@ -19,20 +19,25 @@ class App extends Component {
   };
 
   handlePrint = (n) => {
-    let { display, operation, size, preview, equal } = this.state;
+    let {
+      display,
+      operation,
+      size,
+      preview,
+      equal,
+      memory,
+      highOperation,
+    } = this.state;
 
     if (!operation && display.length >= size) return null;
 
     this.setState({
       display: operation || equal || display === "0" ? n : display + n,
-      preview: equal
-        ? n
-        : display === "0"
-        ? preview.slice(0, -1) + ` ${n}`
-        : preview + n,
+      preview: display === "0" ? preview.slice(0, -1) + ` ${n}` : preview + n,
       operation: false,
       equal: false,
       deleteText: "C",
+      memory: !highOperation ? "" : memory + n,
     });
   };
 
@@ -54,20 +59,19 @@ class App extends Component {
         highOperation: true,
         memory:
           memory === ""
-            ? display
+            ? memory + display + `${s}`
             : operation
-            ? memory
-            : eval(memory + s + display),
+            ? memory.slice(0, -1) + `${s}`
+            : memory + `${s}`,
         display:
           memory === ""
             ? display
             : operation
-            ? memory
-            : eval(memory + s + display),
+            ? eval(memory.slice(0, -1))
+            : eval(memory),
       });
     } else {
       this.setState({
-        memory: "",
         highOperation: false,
       });
     }
@@ -90,18 +94,25 @@ class App extends Component {
   };
 
   handleEqual = () => {
-    let { preview, operation, history, equal } = this.state;
+    let { preview, operation, size, history, equal } = this.state;
 
     if (equal) return null;
 
+    let result;
+
+    if (operation) {
+      result = String(eval(preview.slice(0, -2)));
+    } else {
+      result = String(eval(preview));
+    }
+    if (result.length > size) {
+      result = Number(result).toExponential(0);
+    }
+
     this.setState({
       operation: false,
-      display: operation
-        ? eval(preview.slice(0, -2)).toExponential(5)
-        : eval(preview).toExponential(5),
-      preview: operation
-        ? String(eval(preview.slice(0, -2)).toExponential(5))
-        : String(eval(preview).toExponential(5)),
+      display: Number(result),
+      preview: result,
       history: operation
         ? [...history, preview.slice(0, -2)]
         : [...history, preview],
@@ -118,18 +129,24 @@ class App extends Component {
   };
 
   handleDelete = () => {
-    let { display, preview, operation } = this.state;
+    let { display, preview, memory, deleteText } = this.state;
 
-    if (display !== "") {
+    if (deleteText === "C") {
       preview = preview.split(" ");
       preview.pop();
       preview.push(" ");
       preview = preview.join(" ");
 
+      memory = memory.split("");
+      memory.pop();
+      memory = memory.join("");
+
       this.setState({
-        display: "",
+        display: "0",
         preview: preview,
         deleteText: "AC",
+        equal: true,
+        memory: memory,
       });
     } else {
       this.setState({
@@ -147,14 +164,18 @@ class App extends Component {
   handleDisplay = () => {
     let { display, size, operation, preview, highOperation } = this.state;
 
-    if (display.length > 99) return "error";
-
     if (operation && !highOperation)
       display = String(eval(preview.slice(0, -2)));
 
     if (highOperation) display = String(display);
 
-    return display.length > size ? Number(display).toExponential(5) : display;
+    if (display.length > size) display = String(Number(display).toFixed(2));
+
+    if (display.length > 99) return "error";
+
+    return display.length > size
+      ? (display = Number(display).toExponential(0))
+      : Number(display);
   };
 
   handleComma = (c) => {

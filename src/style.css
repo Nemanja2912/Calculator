@@ -8,6 +8,7 @@ body {
   color: #121212;
   font-family: sans-serif;
   font-size: 30px;
+  width: 100vw;
   overflow: hidden;
 }
 
@@ -40,6 +41,7 @@ body {
 .display {
   padding-bottom: 20px;
   font-size: 60px;
+  padding-right: 10px;
 }
 
 .preview {
