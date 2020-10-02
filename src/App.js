@@ -129,7 +129,16 @@ class App extends Component {
   };
 
   handleDelete = () => {
-    let { display, preview, memory, deleteText } = this.state;
+    let { display, preview, memory, deleteText, operation } = this.state;
+
+    if (operation && deleteText === "C") {
+      this.setState({
+        display: "0",
+        deleteText: "AC",
+        equal: true,
+      });
+      return null;
+    }
 
     if (deleteText === "C") {
       preview = preview.split(" ");
@@ -162,10 +171,19 @@ class App extends Component {
   };
 
   handleDisplay = () => {
-    let { display, size, operation, preview, highOperation } = this.state;
+    let {
+      display,
+      size,
+      operation,
+      preview,
+      highOperation,
+      equal,
+    } = this.state;
 
-    if (operation && !highOperation)
+    if (operation && !highOperation && !equal)
       display = String(eval(preview.slice(0, -2)));
+
+    console.log(display);
 
     if (highOperation) display = String(display);
 
@@ -201,6 +219,44 @@ class App extends Component {
     });
   };
 
+  handleSign = () => {
+    let { display, operation, preview } = this.state;
+
+    if (operation) {
+      return null;
+    }
+
+    if (preview) {
+      preview = preview.split(" ");
+      preview[preview.length - 1] = String(preview[preview.length - 1] * -1);
+      preview = preview.join(" ");
+    }
+
+    this.setState({
+      display: String(display * -1),
+      preview: preview,
+    });
+  };
+
+  handlePercentage = () => {
+    let { display, operation, preview } = this.state;
+
+    if (operation) {
+      return null;
+    }
+
+    if (preview) {
+      preview = preview.split(" ");
+      preview[preview.length - 1] = String(preview[preview.length - 1] / 100);
+      preview = preview.join(" ");
+    }
+
+    this.setState({
+      display: String(display / 100),
+      preview: preview,
+    });
+  };
+
   render() {
     return (
       <div style={{ height: this.state.height }} className="app">
@@ -219,6 +275,8 @@ class App extends Component {
           handleDelete={this.handleDelete}
           deleteText={this.state.deleteText}
           handleComma={this.handleComma}
+          handleSign={this.handleSign}
+          handlePercentage={this.handlePercentage}
         />
         <History
           hide={this.state.hide}

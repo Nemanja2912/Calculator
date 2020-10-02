@@ -30,6 +30,8 @@ class Body extends Component {
       handleDelete,
       deleteText,
       handleComma,
+      handleSign,
+      handlePercentage,
     } = this.props;
 
     return (
@@ -41,11 +43,15 @@ class Body extends Component {
             button={deleteText}
           ></Button>
           <Button
-            handleFunc={handlePrint}
+            handleFunc={handleSign}
             operation="true"
             button="+/-"
           ></Button>
-          <Button handleFunc={handlePrint} operation="true" button="%"></Button>
+          <Button
+            handleFunc={handlePercentage}
+            operation="true"
+            button="%"
+          ></Button>
           <Button
             handleFunc={handleDivision}
             operation="true"
