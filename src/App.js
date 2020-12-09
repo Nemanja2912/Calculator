@@ -127,6 +127,7 @@ class App extends Component {
     }
 
     if (action === "comma") {
+      if (operation) return;
       if (comma) return;
 
       preview[preview.length - 1] = preview[preview.length - 1] + ".";
@@ -140,6 +141,8 @@ class App extends Component {
     }
 
     if (action === "percent") {
+      if (operation) return;
+
       preview[preview.length - 1] = preview[preview.length - 1] / 100;
 
       this.setState({
