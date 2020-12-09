@@ -1,91 +1,98 @@
 import React, { Component } from "react";
-import Button from "./Button";
 
 class Body extends Component {
-  state = {
-    advanceClass: "advance",
-    advanceBodyClass: "advance-body",
-    n: 0,
-  };
-
-  handleAdvance = () => {
-    let advanceOpen = this.state.advanceClass !== "advance";
-
-    this.setState({
-      advanceClass: advanceOpen ? "advance" : "advance advance-open",
-      advanceBodyClass: advanceOpen
-        ? "advance-body"
-        : "advance-body advance-body-open",
-    });
-  };
-
   render() {
     const {
-      handlePrint,
-      handleAdd,
-      handleSubstraction,
-      handleDivision,
-      handleMultiplication,
-      handleEqual,
-      handleDelete,
-      deleteText,
-      handleComma,
-      handleSign,
-      handlePercentage,
+      handlePrintNumber,
+      handleOperationAction,
+      handleOtherAction,
     } = this.props;
 
     return (
       <div className="calc-body">
         <div className="number">
-          <Button
-            handleFunc={handleDelete}
-            operation="true"
-            button={deleteText}
-          ></Button>
-          <Button
-            handleFunc={handleSign}
-            operation="true"
-            button="+/-"
-          ></Button>
-          <Button
-            handleFunc={handlePercentage}
-            operation="true"
-            button="%"
-          ></Button>
-          <Button
-            handleFunc={handleDivision}
-            operation="true"
-            button="/"
-          ></Button>
-          <Button handleFunc={handlePrint} button="7"></Button>
-          <Button handleFunc={handlePrint} button="8"></Button>
-          <Button handleFunc={handlePrint} button="9"></Button>
-          <Button
-            handleFunc={handleMultiplication}
-            operation="true"
-            button="*"
-          ></Button>
-          <Button handleFunc={handlePrint} button="4"></Button>
-          <Button handleFunc={handlePrint} button="5"></Button>
-          <Button handleFunc={handlePrint} button="6"></Button>
-          <Button
-            handleFunc={handleSubstraction}
-            operation="true"
-            button="-"
-          ></Button>
-          <Button handleFunc={handlePrint} button="1"></Button>
-          <Button handleFunc={handlePrint} button="2"></Button>
-          <Button handleFunc={handlePrint} button="3"></Button>
-          <Button handleFunc={handleAdd} operation="true" button="+"></Button>
-          <Button handleFunc={handlePrint} span="true" button="0"></Button>
-
-          <Button handleFunc={handleComma} button="."></Button>
-          <Button handleFunc={handleEqual} button="=" operation="true"></Button>
+          <p
+            onClick={() => handleOtherAction("reset")}
+            className="button operation reset"
+          >
+            AC
+          </p>
+          <p
+            onClick={() => handleOtherAction("sign")}
+            className="button operation"
+          >
+            +/-
+          </p>
+          <p
+            onClick={() => handleOtherAction("percent")}
+            className="button operation"
+          >
+            %
+          </p>
+          <p
+            onClick={() => handleOperationAction("division")}
+            className="button operation special"
+          >
+            <span>&#247;</span>
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            7
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            8
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            9
+          </p>
+          <p
+            onClick={() => handleOperationAction("multiplication")}
+            className="button operation special"
+          >
+            <span>&#215;</span>
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            4
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            5
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            6
+          </p>
+          <p
+            onClick={() => handleOperationAction("subtraction")}
+            className="button operation special"
+          >
+            -
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            1
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            2
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="button">
+            3
+          </p>
+          <p
+            onClick={() => handleOperationAction("addition")}
+            className="button operation special"
+          >
+            +
+          </p>
+          <p onClick={(e) => handlePrintNumber(e)} className="span2 button">
+            0
+          </p>
+          <p onClick={() => handleOtherAction("comma")} className="button">
+            .
+          </p>
+          <p
+            onClick={() => handleOperationAction("equal")}
+            className="button  equal"
+          >
+            =
+          </p>
         </div>
-        <div className={this.state.advanceClass}>
-          <p onClick={this.handleAdvance}>&#x2039;</p>
-        </div>
-        <div className={this.state.advanceBodyClass}></div>
       </div>
     );
   }

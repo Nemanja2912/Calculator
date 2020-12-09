@@ -4,256 +4,165 @@ import Body from "./components/Body";
 import History from "./components/History";
 
 class App extends Component {
+  // State
   state = {
     height: window.innerHeight,
-    display: "",
-    preview: "",
+    num: "",
+    prevNum: "",
     operation: false,
-    highOperation: false,
-    memory: "",
-    history: [],
-    size: 9,
+    preview: [0],
+    error: false,
     equal: false,
-    hide: true,
-    deleteText: "AC",
   };
 
-  handlePrint = (n) => {
-    let {
-      display,
-      operation,
-      size,
-      preview,
-      equal,
-      memory,
-      highOperation,
-    } = this.state;
+  // Number click
 
-    if (!operation && display.length >= size) return null;
+  handlePrintNumber = (e) => {
+    const { num, operation, preview, equal } = this.state;
 
-    this.setState({
-      display: operation || equal || display === "0" ? n : display + n,
-      preview: display === "0" ? preview.slice(0, -1) + ` ${n}` : preview + n,
-      operation: false,
-      equal: false,
-      deleteText: "C",
-      memory: !highOperation ? "" : memory + n,
-    });
-  };
+    if (num.length > 7) return;
 
-  operation = (s) => {
-    let { preview, operation, display, highOperation, memory } = this.state;
+    if (num === "" && e.target.innerHTML === "0") return;
 
-    if (display === "") preview = 0;
+    const currentNum = e.target.innerHTML;
 
-    if (operation && display !== "") preview = preview.slice(0, -2);
-
-    this.setState({
-      operation: true,
-      preview: preview + ` ${s} `,
-      equal: false,
-    });
-
-    if (s === "*" || s === "/") {
-      this.setState({
-        highOperation: true,
-        memory:
-          memory === ""
-            ? memory + display + `${s}`
-            : operation
-            ? memory.slice(0, -1) + `${s}`
-            : memory + `${s}`,
-        display:
-          memory === ""
-            ? display
-            : operation
-            ? eval(memory.slice(0, -1))
-            : eval(memory),
-      });
-    } else {
-      this.setState({
-        highOperation: false,
-      });
-    }
-  };
-
-  handleAdd = () => {
-    this.operation("+");
-  };
-
-  handleSubstraction = () => {
-    this.operation("-");
-  };
-
-  handleDivision = () => {
-    this.operation("/");
-  };
-
-  handleMultiplication = () => {
-    this.operation("*");
-  };
-
-  handleEqual = () => {
-    let { preview, operation, size, history, equal } = this.state;
-
-    if (equal) return null;
-
-    let result;
+    let number = operation || equal ? currentNum : num + currentNum;
 
     if (operation) {
-      result = String(eval(preview.slice(0, -2)));
+      preview[preview.length] = currentNum;
+    } else if (equal) {
+      preview[preview.length - 1] = [currentNum];
     } else {
-      result = String(eval(preview));
-    }
-    if (result.length > size) {
-      result = Number(result).toExponential(0);
+      preview[preview.length - 1] = num + currentNum;
     }
 
     this.setState({
+      num: number,
       operation: false,
-      display: Number(result),
-      preview: result,
-      history: operation
-        ? [...history, preview.slice(0, -2)]
-        : [...history, preview],
-      equal: true,
+      preview: preview,
+      comma: false,
+      equal: false,
     });
   };
 
-  handleHide = () => {
-    let { hide } = this.state;
+  // Operation action
+  handleOperationAction = (action) => {
+    const { operation, preview } = this.state;
 
-    this.setState({
-      hide: hide ? false : true,
-    });
-  };
+    if (operation) preview.pop();
 
-  handleDelete = () => {
-    let { display, preview, memory, deleteText, operation } = this.state;
+    let result = eval(preview.join(""));
 
-    if (operation && deleteText === "C") {
+    if (isNaN(result) || !isFinite(result)) {
+      result = "Error";
+
       this.setState({
-        display: "0",
-        deleteText: "AC",
-        equal: true,
+        error: true,
       });
-      return null;
     }
 
-    if (deleteText === "C") {
-      preview = preview.split(" ");
-      preview.pop();
-      preview.push(" ");
-      preview = preview.join(" ");
+    if (action === "addition") {
+      preview[preview.length] = " + ";
+    }
 
-      memory = memory.split("");
-      memory.pop();
-      memory = memory.join("");
+    if (action === "subtraction") {
+      preview[preview.length] = " - ";
+    }
 
+    if (action === "multiplication") {
+      preview[preview.length] = " * ";
+    }
+
+    if (action === "division") {
+      preview[preview.length] = " / ";
+    }
+
+    this.setState({
+      prevNum: result,
+      num: result,
+      operation: true,
+      preview: preview,
+      comma: false,
+      equal: false,
+    });
+
+    if (action === "equal") {
       this.setState({
-        display: "0",
-        preview: preview,
-        deleteText: "AC",
-        equal: true,
-        memory: memory,
-      });
-    } else {
-      this.setState({
-        display: "",
-        preview: "",
+        prevNum: result,
+        num: result,
         operation: false,
-        highOperation: false,
-        memory: "",
-        history: [],
+        comma: false,
+        equal: true,
+        preview: [result],
+      });
+    }
+  };
+
+  // Other button
+
+  handleOtherAction = (action) => {
+    const { preview, num, operation, comma } = this.state;
+
+    if (action === "reset") {
+      this.setState({
+        num: "",
+        prevNum: "",
+        operation: false,
+        preview: [0],
+        comma: false,
+        equal: false,
+      });
+    }
+
+    if (action === "sign") {
+      if (operation) return;
+
+      preview[preview.length - 1] = preview[preview.length - 1] * -1;
+
+      this.setState({
+        num: num * -1,
+        preview: preview,
+        equal: false,
+      });
+    }
+
+    if (action === "comma") {
+      if (comma) return;
+
+      preview[preview.length - 1] = preview[preview.length - 1] + ".";
+
+      this.setState({
+        preview: preview,
+        num: num === "" ? "0." : num + ".",
+        comma: true,
+        equal: false,
+      });
+    }
+
+    if (action === "percent") {
+      preview[preview.length - 1] = preview[preview.length - 1] / 100;
+
+      this.setState({
+        num: num / 100,
+        preview: preview,
         equal: false,
       });
     }
   };
 
-  handleDisplay = () => {
-    let {
-      display,
-      size,
-      operation,
-      preview,
-      highOperation,
-      equal,
-    } = this.state;
+  // Delete from Array
 
-    if (operation && !highOperation && !equal)
-      display = String(eval(preview.slice(0, -2)));
-
-    console.log(display);
-
-    if (highOperation) display = String(display);
-
-    if (display.length > size) display = String(Number(display).toFixed(2));
-
-    if (display.length > 99) return "error";
-
-    return display.length > size
-      ? (display = Number(display).toExponential(0))
-      : Number(display);
-  };
-
-  handleComma = (c) => {
-    let { display, operation, size, preview, equal } = this.state;
-
-    if (display === "" || operation) c = "0.";
-
-    if (!operation && display.length >= size - 1) return null;
-
-    if (
-      display !== String(Math.round(Number(display))) &&
-      display !== "" &&
-      !operation
-    )
-      return null;
+  handleDelete = () => {
+    let deleteLast = [...this.state.preview];
+    deleteLast.pop();
 
     this.setState({
-      display: operation || equal ? c : display + c,
-      preview: equal ? c : preview + c,
-      operation: false,
-      equal: false,
-      deleteText: "C",
-    });
-  };
-
-  handleSign = () => {
-    let { display, operation, preview } = this.state;
-
-    if (operation) {
-      return null;
-    }
-
-    if (preview) {
-      preview = preview.split(" ");
-      preview[preview.length - 1] = String(preview[preview.length - 1] * -1);
-      preview = preview.join(" ");
-    }
-
-    this.setState({
-      display: String(display * -1),
-      preview: preview,
-    });
-  };
-
-  handlePercentage = () => {
-    let { display, operation, preview } = this.state;
-
-    if (operation) {
-      return null;
-    }
-
-    if (preview) {
-      preview = preview.split(" ");
-      preview[preview.length - 1] = String(preview[preview.length - 1] / 100);
-      preview = preview.join(" ");
-    }
-
-    this.setState({
-      display: String(display / 100),
-      preview: preview,
+      preview: deleteLast.length === 0 ? [0] : deleteLast,
+      num: "",
+      operation:
+        isNaN(deleteLast[deleteLast.length - 1]) && deleteLast.length > 0
+          ? true
+          : false,
     });
   };
 
@@ -261,28 +170,17 @@ class App extends Component {
     return (
       <div style={{ height: this.state.height }} className="app">
         <Screen
-          display={this.handleDisplay()}
+          num={this.state.num}
           preview={this.state.preview}
-          handleHide={this.handleHide}
+          handleDelete={this.handleDelete}
         />
         <Body
-          handlePrint={this.handlePrint}
-          handleAdd={this.handleAdd}
-          handleSubstraction={this.handleSubstraction}
-          handleMultiplication={this.handleMultiplication}
-          handleDivision={this.handleDivision}
-          handleEqual={this.handleEqual}
-          handleDelete={this.handleDelete}
-          deleteText={this.state.deleteText}
-          handleComma={this.handleComma}
-          handleSign={this.handleSign}
-          handlePercentage={this.handlePercentage}
+          reset={this.state.reset}
+          handleOperationAction={this.handleOperationAction}
+          handlePrintNumber={this.handlePrintNumber}
+          handleOtherAction={this.handleOtherAction}
         />
-        <History
-          hide={this.state.hide}
-          history={this.state.history}
-          handleHide={this.handleHide}
-        />
+        {/* <History /> */}
       </div>
     );
   }
